@@ -4,7 +4,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "PLUGIN_DATA=\"${CODEBUDDY_PLUGIN_DATA:-${HOME}/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy}\" && if [ ! -f \"${PLUGIN_DATA}/config.yaml\" ]; then echo '' >&2; echo '⚠ QQ Bot 插件尚未配置。请运行以下命令完成安装：' >&2; echo '  bash \"${CODEBUDDY_PLUGIN_ROOT}/scripts/setup.sh\"' >&2; echo '' >&2; fi"
+          "command": "if [ ! -f \"${CODEBUDDY_PLUGIN_DATA:-${HOME}/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy}/config.yaml\" ]; then echo 'QQ Bot 插件尚未配置。请运行以下命令完成安装配置（需要输入 QQ Bot 的 appId 和 clientSecret）：bash \"${CODEBUDDY_PLUGIN_ROOT}/scripts/setup.sh\"  也可以直接传入参数：bash \"${CODEBUDDY_PLUGIN_ROOT}/scripts/setup.sh YOUR_APP_ID YOUR_CLIENT_SECRET'; fi"
         }
       ]
     }
