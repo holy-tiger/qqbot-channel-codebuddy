@@ -4,11 +4,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "test -x \"${HOME}/.local/bin/qqbot\" || bash \"${CODEBUDDY_PLUGIN_ROOT}/scripts/install.sh\""
-        },
-        {
-          "type": "command",
-          "command": "PLUGIN_DATA=\"${CODEBUDDY_PLUGIN_DATA:-${HOME}/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy}\" && if [ ! -f \"${PLUGIN_DATA}/config.yaml\" ]; then echo 'QQ Bot 尚未配置，正在启动安装向导...' >&2; bash \"${CODEBUDDY_PLUGIN_ROOT}/scripts/setup.sh\"; fi"
+          "command": "PLUGIN_DATA=\"${CODEBUDDY_PLUGIN_DATA:-${HOME}/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy}\" && if [ ! -f \"${PLUGIN_DATA}/config.yaml\" ]; then echo '' >&2; echo '⚠ QQ Bot 插件尚未配置。请运行以下命令完成安装：' >&2; echo '  bash \"${CODEBUDDY_PLUGIN_ROOT}/scripts/setup.sh\"' >&2; echo '' >&2; fi"
         }
       ]
     }
