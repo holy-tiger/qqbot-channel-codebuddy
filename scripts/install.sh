@@ -38,12 +38,24 @@ case "$ARCH" in
 esac
 
 ARCHIVE="qqbot_${OS}_${ARCH_SUFFIX}"
-URL="https://github.com/${REPO}/releases/download/${VERSION}/${ARCHIVE}.tar.gz"
 TMPDIR=$(mktemp -d)
 
+if [ "$WINDOWS_MODE" = true ]; then
+  EXT="zip"
+  URL="https://github.com/${REPO}/releases/download/${VERSION}/${ARCHIVE}.zip"
+else
+  EXT="tar.gz"
+  URL="https://github.com/${REPO}/releases/download/${VERSION}/${ARCHIVE}.tar.gz"
+fi
+
 echo "Downloading ${URL}..."
-curl -fSL -o "${TMPDIR}/${ARCHIVE}.tar.gz" "$URL"
-tar -xzf "${TMPDIR}/${ARCHIVE}.tar.gz" -C "${TMPDIR}"
+curl -fSL -o "${TMPDIR}/${ARCHIVE}.${EXT}" "$URL"
+
+if [ "$WINDOWS_MODE" = true ]; then
+  unzip -q "${TMPDIR}/${ARCHIVE}.zip" -d "${TMPDIR}"
+else
+  tar -xzf "${TMPDIR}/${ARCHIVE}.tar.gz" -C "${TMPDIR}"
+fi
 
 # Install binaries
 mkdir -p "$INSTALL_DIR"
