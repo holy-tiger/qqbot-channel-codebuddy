@@ -8,7 +8,7 @@
         },
         {
           "type": "command",
-          "command": "PLUGIN_DATA=\"${CODEBUDDY_PLUGIN_DATA:-${HOME}/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy}\" && if [ -n \"${CODEBUDDY_PLUGIN_OPTION_appId:-}\" ] && [ -n \"${CODEBUDDY_PLUGIN_OPTION_clientSecret:-}\" ]; then mkdir -p \"${PLUGIN_DATA}\" && cat > \"${PLUGIN_DATA}/config.yaml\" <<YAML\nqqbot:\n  appId: \"${CODEBUDDY_PLUGIN_OPTION_appId}\"\n  clientSecret: \"${CODEBUDDY_PLUGIN_OPTION_clientSecret}\"\n  enabled: true\n  name: \"My QQ Bot\"\n  systemPrompt: \"You are a helpful assistant.\"\n  dmPolicy: \"open\"\nYAML\necho \"QQ Bot config written to ${PLUGIN_DATA}/config.yaml\"; else echo 'Warning: QQ Bot credentials not configured. Run: codebuddy plugin enable qqbot-channel' >&2; echo 'Or run: bash ${CODEBUDDY_PLUGIN_ROOT}/scripts/setup.sh' >&2; fi"
+          "command": "PLUGIN_DATA=\"${CODEBUDDY_PLUGIN_DATA:-${HOME}/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy}\" && if [ ! -f \"${PLUGIN_DATA}/config.yaml\" ]; then echo 'QQ Bot 尚未配置，正在启动安装向导...' >&2; bash \"${CODEBUDDY_PLUGIN_ROOT}/scripts/setup.sh\"; fi"
         }
       ]
     }

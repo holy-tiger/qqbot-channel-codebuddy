@@ -30,52 +30,47 @@ Bridges QQ messaging (C2C private chat, group chat, guild channel, guild DM) to 
 
 ### 1. Add marketplace
 
-```
+```bash
 codebuddy plugin marketplace add https://github.com/holy-tiger/qqbot-channel-codebuddy
 ```
 
 ### 2. Install plugin
 
-```
+```bash
 codebuddy plugin install qqbot-channel@qqbot-channel-codebuddy
 ```
 
-### 3. Configure credentials
+### 3. Enable plugin
 
-**In CodeBuddy Code interactive mode** (recommended):
-
-When enabling the plugin, CodeBuddy Code will prompt you to enter:
-
-- **appId** - QQ Bot 应用 ID（可在 https://q.qq.com 获取）
-- **clientSecret** - QQ Bot 客户端密钥（敏感信息，存储在系统钥匙串中）
-
-**In CLI mode** (if the prompt does not appear):
-
-Manually add credentials to `~/.codebuddy/settings.json`:
-
-```json
-{
-  "pluginConfigs": {
-    "qqbot-channel@qqbot-channel-codebuddy": {
-      "options": {
-        "appId": "YOUR_APP_ID",
-        "clientSecret": "YOUR_APP_SECRET"
-      }
-    }
-  }
-}
-```
-
-### 4. Enable plugin
-
-```
+```bash
 codebuddy plugin enable qqbot-channel
 ```
 
-The `SessionStart` hook will automatically:
+### 4. Run setup
 
-1. Download and install the `qqbot` binary (if not already installed)
-2. Generate `config.yaml` using your credentials into the plugin data directory
+首次启用后，启动新的 CodeBuddy Code 会话时，SessionStart hook 会自动检测并运行安装向导。
+
+也可以手动运行：
+
+```bash
+# 交互式安装（推荐）
+bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/setup.sh
+
+# 或直接传入凭证
+bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/setup.sh YOUR_APP_ID YOUR_APP_SECRET
+```
+
+安装向导会依次提示输入：
+
+| 配置项 | 说明 | 默认值 |
+|--------|------|--------|
+| appId | QQ Bot 应用 ID（https://q.qq.com 获取） | 无，必填 |
+| clientSecret | QQ Bot 客户端密钥 | 无，必填 |
+| Bot 名称 | 机器人显示名称 | My QQ Bot |
+| System Prompt | 系统提示词 | You are a helpful assistant. |
+| 私聊策略 | open / whitelist / close | open |
+
+如需修改配置，重新运行 `setup.sh` 即可（会提示是否覆盖现有配置）。
 
 ## Configuration
 
@@ -104,16 +99,12 @@ When enabled, tool call approval requests from CodeBuddy Code are forwarded to t
 
 ### Config file not generated
 
-If the bot doesn't connect after installation, the `config.yaml` may not have been created. This happens when `CODEBUDDY_PLUGIN_DATA` is unavailable or credentials weren't passed to the hook.
+If the bot doesn't connect after installation, the `config.yaml` may not have been created.
 
-Run the manual setup script:
+Run the setup script manually:
 
 ```bash
-# Interactive (will prompt for credentials)
 bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/setup.sh
-
-# Or pass credentials directly
-bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/setup.sh YOUR_APP_ID YOUR_APP_SECRET
 ```
 
 Or create the config manually:
