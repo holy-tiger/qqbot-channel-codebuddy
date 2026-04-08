@@ -100,6 +100,54 @@ The `SessionStart` hook will automatically:
 
 When enabled, tool call approval requests from CodeBuddy Code are forwarded to the QQ user. Users reply with `yes <id>` or `no <id>` to approve or deny.
 
+## Troubleshooting
+
+### Config file not generated
+
+If the bot doesn't connect after installation, the `config.yaml` may not have been created. This happens when `CODEBUDDY_PLUGIN_DATA` is unavailable or credentials weren't passed to the hook.
+
+Run the manual setup script:
+
+```bash
+# Interactive (will prompt for credentials)
+bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/setup.sh
+
+# Or pass credentials directly
+bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/setup.sh YOUR_APP_ID YOUR_APP_SECRET
+```
+
+Or create the config manually:
+
+```bash
+mkdir -p ~/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy
+
+cat > ~/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy/config.yaml <<'YAML'
+qqbot:
+  appId: "YOUR_APP_ID"
+  clientSecret: "YOUR_APP_SECRET"
+  enabled: true
+  name: "My QQ Bot"
+  systemPrompt: "You are a helpful assistant."
+  dmPolicy: "open"
+YAML
+```
+
+### Marketplace update fails (git pull error 128)
+
+This is a network connectivity issue — the plugin marketplace fetches updates from GitHub. If your network blocks GitHub access:
+
+1. Set a proxy: `export https_proxy=http://your-proxy:port`
+2. Or use a GitHub mirror
+3. Then retry: `codebuddy plugin marketplace add https://github.com/holy-tiger/qqbot-channel-codebuddy`
+
+### Binary download fails
+
+The install script downloads from GitHub Releases. If this fails:
+
+1. Manually download from [qqbot-go releases](https://github.com/holy-tiger/qqbot-go/releases)
+2. Extract `qqbot` and `qqbot-channel` to `~/.local/bin/`
+3. Make executable: `chmod +x ~/.local/bin/qqbot ~/.local/bin/qqbot-channel`
+
 ## Related
 
 - [qqbot-go](https://github.com/holy-tiger/qqbot-go) - QQ Bot API service

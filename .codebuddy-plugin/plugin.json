@@ -1,6 +1,6 @@
 {
   "name": "qqbot-channel",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "QQ Bot MCP Channel Server - bridges QQ messaging to CodeBuddy Code via MCP protocol",
   "author": {
     "name": "holy-tiger",
