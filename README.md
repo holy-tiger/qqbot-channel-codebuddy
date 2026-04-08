@@ -95,11 +95,37 @@ bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/se
 
 ### MCP Tools
 
-| Tool | Description |
-|------|-------------|
-| `reply` | Send a message to a QQ chat |
-| `remind` | Set a scheduled reminder (C2C/group) |
-| `cancel_reminder` | Cancel a scheduled reminder |
+#### `reply` - 回复 QQ 消息
+
+发送文本或富媒体消息到指定的会话。不设置 `media_type` 则发送纯文本。
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `chat_id` | Yes | 会话 ID，格式见下方 chat_id Format |
+| `text` | Yes | 要发送的文本内容。纯文本消息时为消息正文；媒体消息时为图片说明/文件描述等 |
+| `media_type` | No | 媒体类型，可选: `image` (图片), `file` (文件), `voice` (语音), `video` (视频)。不设置则发送纯文本 |
+| `media_url` | No | 媒体文件的 URL。`media_type` 为 `image`/`file`/`video` 时必填 |
+
+**语音消息说明**: `media_type` 设为 `voice` 时，插件使用内置 Edge TTS 将 `text` 转为语音发送，无需额外安装 TTS，也无需提供 `media_url`。
+
+**使用示例**:
+
+```
+# 发送纯文本
+reply(chat_id="c2c:o_abc123", text="你好！")
+
+# 发送语音（text 内容会被 Edge TTS 转为语音）
+reply(chat_id="group:grp_abc123", text="这是一条语音消息", media_type="voice")
+
+# 发送图片
+reply(chat_id="c2c:o_abc123", text="看这张图", media_type="image", media_url="https://example.com/photo.jpg")
+```
+
+#### `remind` - 设置定时提醒
+
+在 C2C 或群聊中设置 cron 定时提醒。
+
+#### `cancel_reminder` - 取消定时提醒
 
 ### chat_id Format
 
