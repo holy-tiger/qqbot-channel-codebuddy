@@ -40,18 +40,39 @@ codebuddy plugin marketplace add https://github.com/holy-tiger/qqbot-channel-cod
 codebuddy plugin install qqbot-channel@qqbot-channel-codebuddy
 ```
 
-During installation, CodeBuddy Code will prompt you to enter your QQ Bot credentials:
+### 3. Configure credentials
+
+**In CodeBuddy Code interactive mode** (recommended):
+
+When enabling the plugin, CodeBuddy Code will prompt you to enter:
 
 - **appId** - QQ Bot 应用 ID（可在 https://q.qq.com 获取）
 - **clientSecret** - QQ Bot 客户端密钥（敏感信息，存储在系统钥匙串中）
 
-### 3. Enable plugin
+**In CLI mode** (if the prompt does not appear):
+
+Manually add credentials to `~/.codebuddy/settings.json`:
+
+```json
+{
+  "pluginConfigs": {
+    "qqbot-channel@qqbot-channel-codebuddy": {
+      "options": {
+        "appId": "YOUR_APP_ID",
+        "clientSecret": "YOUR_APP_SECRET"
+      }
+    }
+  }
+}
+```
+
+### 4. Enable plugin
 
 ```
 codebuddy plugin enable qqbot-channel
 ```
 
-That's it! The `SessionStart` hook will automatically:
+The `SessionStart` hook will automatically:
 
 1. Download and install the `qqbot` binary (if not already installed)
 2. Generate `config.yaml` using your credentials into the plugin data directory
