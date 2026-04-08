@@ -106,7 +106,7 @@ bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/se
 | `media_type` | No | 媒体类型，可选: `image` (图片), `file` (文件), `voice` (语音), `video` (视频)。不设置则发送纯文本 |
 | `media_url` | No | 媒体文件的 URL。`media_type` 为 `image`/`file`/`video` 时必填 |
 
-**语音消息说明**: `media_type` 设为 `voice` 时，插件使用内置 Edge TTS 将 `text` 转为语音发送，无需额外安装 TTS，也无需提供 `media_url`。
+**语音消息说明**: `media_type` 设为 `voice` 时，插件内部使用 Edge TTS 自动将 `text` 转为语音发送。**不要自行安装 edge-tts 或任何 TTS 工具**，直接调用 `reply` 工具并设置 `media_type="voice"` 即可，无需提供 `media_url`。
 
 **使用示例**:
 
@@ -123,9 +123,40 @@ reply(chat_id="c2c:o_abc123", text="看这张图", media_type="image", media_url
 
 #### `remind` - 设置定时提醒
 
-在 C2C 或群聊中设置 cron 定时提醒。
+到时间后通过 qqbot 向指定会话发送文本消息。不设置 `schedule` 则立即发送一次。仅支持 c2c 和 group 类型会话。
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `chat_id` | Yes | 会话 ID，格式: `c2c:user_openid` (私聊) 或 `group:group_openid` (群聊) |
+| `text` | Yes | 提醒内容文本 |
+| `schedule` | No | 定时规则。支持 `@every 30m` (间隔) 或 5 字段 cron 表达式。不设置则立即发送一次 |
+
+**使用示例**:
+
+```
+# 立即发送一次
+remind(chat_id="c2c:o_abc123", text="该喝水了！")
+
+# 每 30 分钟提醒一次
+remind(chat_id="c2c:o_abc123", text="该喝水了！", schedule="@every 30m")
+
+# 使用 cron 表达式（每天 9:00）
+remind(chat_id="group:grp_abc123", text="早上好！", schedule="0 9 * * *")
+```
 
 #### `cancel_reminder` - 取消定时提醒
+
+取消一个已设置的定时提醒。
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `job_id` | Yes | 提醒任务 ID（由 `remind` 工具返回） |
+
+**使用示例**:
+
+```
+cancel_reminder(job_id="abc123")
+```
 
 ### chat_id Format
 
