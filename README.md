@@ -18,6 +18,14 @@ Bridges QQ messaging (C2C private chat, group chat, guild channel, guild DM) to 
 - CodeBuddy Code with plugin support
 - A QQ Bot application (App ID + App Secret) from [QQ Open Platform](https://q.qq.com)
 
+## Supported Platforms
+
+| OS | Architecture | Environment |
+|----|--------------|-------------|
+| Linux | x86_64, aarch64 | Native |
+| macOS | x86_64, aarch64 | Native |
+| Windows | x86_64, aarch64 | Git Bash / MSYS2 / Cygwin |
+
 ## Installation
 
 ### 1. Add marketplace
@@ -34,11 +42,21 @@ codebuddy plugin install qqbot-channel@qqbot-channel-codebuddy
 
 ### 3. Install binary
 
+**Linux / macOS:**
+
+```bash
+bash scripts/install.sh
+```
+
+**Windows (Git Bash):**
+
 ```bash
 bash scripts/install.sh
 ```
 
 This downloads the `qqbot` and `qqbot-channel` binaries from [GitHub Releases](https://github.com/holy-tiger/qqbot-go/releases) to `~/.local/bin/`.
+
+On Windows, the binaries will be named `qqbot.exe` and `qqbot-channel.exe`.
 
 ### 4. Configure
 

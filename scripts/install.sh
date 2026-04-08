@@ -20,9 +20,15 @@ echo "Installing qqbot ${VERSION}..."
 # Detect OS and architecture
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 ARCH=$(uname -m)
+WINDOWS_MODE=false
+
 case "$OS" in
-  linux)  ;;
-  darwin) ;;
+  linux)            ;;
+  darwin)           ;;
+  mingw*|msys*|cygwin*)
+    OS="windows"
+    WINDOWS_MODE=true
+    ;;
   *)      echo "Unsupported OS: ${OS}" >&2; exit 1 ;;
 esac
 case "$ARCH" in
@@ -41,9 +47,14 @@ tar -xzf "${TMPDIR}/${ARCHIVE}.tar.gz" -C "${TMPDIR}"
 
 # Install binaries
 mkdir -p "$INSTALL_DIR"
-cp "${TMPDIR}/qqbot" "${INSTALL_DIR}/qqbot"
-cp "${TMPDIR}/qqbot-channel" "${INSTALL_DIR}/qqbot-channel"
-chmod +x "${INSTALL_DIR}/qqbot" "${INSTALL_DIR}/qqbot-channel"
+if [ "$WINDOWS_MODE" = true ]; then
+  cp "${TMPDIR}/qqbot.exe" "${INSTALL_DIR}/qqbot.exe"
+  cp "${TMPDIR}/qqbot-channel.exe" "${INSTALL_DIR}/qqbot-channel.exe"
+else
+  cp "${TMPDIR}/qqbot" "${INSTALL_DIR}/qqbot"
+  cp "${TMPDIR}/qqbot-channel" "${INSTALL_DIR}/qqbot-channel"
+  chmod +x "${INSTALL_DIR}/qqbot" "${INSTALL_DIR}/qqbot-channel"
+fi
 
 # Create default config
 mkdir -p "$CONFIG_DIR"
@@ -69,7 +80,12 @@ fi
 rm -rf "$TMPDIR"
 echo ""
 echo "Installed:"
-echo "  qqbot         -> ${INSTALL_DIR}/qqbot"
-echo "  qqbot-channel -> ${INSTALL_DIR}/qqbot-channel"
+if [ "$WINDOWS_MODE" = true ]; then
+  echo "  qqbot         -> ${INSTALL_DIR}/qqbot.exe"
+  echo "  qqbot-channel -> ${INSTALL_DIR}/qqbot-channel.exe"
+else
+  echo "  qqbot         -> ${INSTALL_DIR}/qqbot"
+  echo "  qqbot-channel -> ${INSTALL_DIR}/qqbot-channel"
+fi
 echo ""
 echo "Make sure ${INSTALL_DIR} is in your PATH."
