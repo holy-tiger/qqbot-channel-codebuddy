@@ -1,8 +1,15 @@
 {
   "mcpServers": {
     "qq-channel": {
-      "command": "qqbot",
-      "args": ["channel", "-config", "~/.qqbot/config.yaml"]
+      "command": "${HOME}/.local/bin/qqbot",
+      "args": [
+        "channel",
+        "-config",
+        "${CODEBUDDY_PLUGIN_DATA}/config.yaml"
+      ]
     }
-  }
+  },
+  "disabledMcpServers": [
+    "qq-channel"
+  ]
 }

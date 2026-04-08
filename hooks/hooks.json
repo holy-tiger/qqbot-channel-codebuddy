@@ -1,0 +1,16 @@
+{
+  "SessionStart": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "test -x \"${HOME}/.local/bin/qqbot\" || bash \"${CODEBUDDY_PLUGIN_ROOT}/scripts/install.sh\""
+        },
+        {
+          "type": "command",
+          "command": "mkdir -p \"${CODEBUDDY_PLUGIN_DATA}\" && cat > \"${CODEBUDDY_PLUGIN_DATA}/config.yaml\" <<YAML\nqqbot:\n  appId: \"${CODEBUDDY_PLUGIN_OPTION_appId}\"\n  clientSecret: \"${CODEBUDDY_PLUGIN_OPTION_clientSecret}\"\n  enabled: true\n  name: \"My QQ Bot\"\n  systemPrompt: \"You are a helpful assistant.\"\n  dmPolicy: \"open\"\nYAML"
+        }
+      ]
+    }
+  ]
+}

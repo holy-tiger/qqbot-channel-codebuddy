@@ -3,7 +3,6 @@ set -euo pipefail
 
 VERSION="${1:-latest}"
 INSTALL_DIR="${HOME}/.local/bin"
-CONFIG_DIR="${HOME}/.qqbot"
 REPO="holy-tiger/qqbot-go"
 
 # Resolve version
@@ -68,25 +67,16 @@ else
   chmod +x "${INSTALL_DIR}/qqbot" "${INSTALL_DIR}/qqbot-channel"
 fi
 
-# Create default config
-mkdir -p "$CONFIG_DIR"
-if [ ! -f "${CONFIG_DIR}/config.yaml" ]; then
-  cat > "${CONFIG_DIR}/config.yaml" <<YAML
-# QQ Bot Configuration
-# See https://github.com/holy-tiger/qqbot-go for details
-
-app_id: "YOUR_APP_ID"
-app_secret: "YOUR_APP_SECRET"
-
-# Channel server
-webhook_port: 8788
-
-# Optional: health and API server
-# health: :8080
-# api: :9090
-YAML
-  echo "Created default config at ${CONFIG_DIR}/config.yaml"
-  echo "Please edit it with your QQ Bot credentials."
+# Ensure INSTALL_DIR is in PATH
+if [[ ":$PATH:" != *":${INSTALL_DIR}:"* ]]; then
+  SHELL_RC="${HOME}/.bashrc"
+  if [ -f "${HOME}/.zshrc" ]; then
+    SHELL_RC="${HOME}/.zshrc"
+  fi
+  echo "" >> "$SHELL_RC"
+  echo "export PATH=\"${INSTALL_DIR}:\$PATH\"" >> "$SHELL_RC"
+  echo "Added ${INSTALL_DIR} to PATH in ${SHELL_RC}"
+  echo "Run 'source ${SHELL_RC}' or start a new shell to apply."
 fi
 
 rm -rf "$TMPDIR"
@@ -99,5 +89,3 @@ else
   echo "  qqbot         -> ${INSTALL_DIR}/qqbot"
   echo "  qqbot-channel -> ${INSTALL_DIR}/qqbot-channel"
 fi
-echo ""
-echo "Make sure ${INSTALL_DIR} is in your PATH."
