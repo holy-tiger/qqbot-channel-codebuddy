@@ -8,8 +8,5 @@
         "${CODEBUDDY_PLUGIN_DATA}/config.yaml"
       ]
     }
-  },
-  "disabledMcpServers": [
-    "qq-channel"
-  ]
+  }
 }
