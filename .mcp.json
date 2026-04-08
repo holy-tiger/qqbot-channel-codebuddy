@@ -5,7 +5,7 @@
       "args": [
         "channel",
         "-config",
-        "${CODEBUDDY_PLUGIN_DATA}/config.yaml"
+        "${HOME}/.local/bin/qqbot-config.yaml"
       ]
     }
   }

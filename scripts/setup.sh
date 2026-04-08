@@ -3,13 +3,14 @@ set -euo pipefail
 
 # Setup script for qqbot-channel plugin
 # Installs the qqbot binary and generates config.yaml interactively.
+# Config file is placed alongside the binary at ~/.local/bin/qqbot-config.yaml
 #
 # Usage:
 #   bash scripts/setup.sh              # interactive, prompts for all fields
 #   bash scripts/setup.sh <appId> <clientSecret>  # non-interactive
 
-PLUGIN_DATA="${CODEBUDDY_PLUGIN_DATA:-${HOME}/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy}"
-CONFIG_FILE="${PLUGIN_DATA}/config.yaml"
+INSTALL_DIR="${HOME}/.local/bin"
+CONFIG_FILE="${INSTALL_DIR}/qqbot-config.yaml"
 
 echo "========================================"
 echo "  qqbot-channel 插件安装配置"
@@ -17,10 +18,10 @@ echo "========================================"
 echo ""
 
 # ── Step 1: Install binary ──────────────────────────────────────────
-if [ -x "${HOME}/.local/bin/qqbot" ]; then
-  echo "[1/3] qqbot 二进制已安装: ${HOME}/.local/bin/qqbot"
+if [ -x "${INSTALL_DIR}/qqbot" ]; then
+  echo "[1/2] qqbot 二进制已安装: ${INSTALL_DIR}/qqbot"
 else
-  echo "[1/3] 正在安装 qqbot 二进制..."
+  echo "[1/2] 正在安装 qqbot 二进制..."
   SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
   bash "${SCRIPT_DIR}/install.sh"
 fi
@@ -87,10 +88,7 @@ esac
 
 # ── Step 4: Write config ────────────────────────────────────────────
 echo ""
-echo "[2/3] 创建数据目录: ${PLUGIN_DATA}"
-mkdir -p "${PLUGIN_DATA}"
-
-echo "[3/3] 写入配置文件: ${CONFIG_FILE}"
+echo "[2/2] 写入配置文件: ${CONFIG_FILE}"
 cat > "${CONFIG_FILE}" <<YAML
 qqbot:
   appId: "${APP_ID}"
@@ -106,6 +104,7 @@ echo "========================================"
 echo "  安装配置完成!"
 echo "========================================"
 echo ""
+echo "  二进制:   ${INSTALL_DIR}/qqbot"
 echo "  配置文件: ${CONFIG_FILE}"
 echo ""
 echo "  下一步:"

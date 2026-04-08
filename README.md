@@ -48,9 +48,7 @@ codebuddy plugin enable qqbot-channel
 
 ### 4. Run setup
 
-首次启用后，启动新的 CodeBuddy Code 会话时，SessionStart hook 会自动检测并运行安装向导。
-
-也可以手动运行：
+手动运行安装脚本，按提示完成配置：
 
 ```bash
 # 交互式安装（推荐）
@@ -71,6 +69,13 @@ bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/se
 | 私聊策略 | open / whitelist / close | open |
 
 如需修改配置，重新运行 `setup.sh` 即可（会提示是否覆盖现有配置）。
+
+### 文件位置
+
+| 文件 | 路径 |
+|------|------|
+| qqbot 二进制 | `~/.local/bin/qqbot` |
+| 配置文件 | `~/.local/bin/qqbot-config.yaml` |
 
 ## Configuration
 
@@ -97,22 +102,20 @@ When enabled, tool call approval requests from CodeBuddy Code are forwarded to t
 
 ## Troubleshooting
 
-### Config file not generated
+### Binary download fails
 
-If the bot doesn't connect after installation, the `config.yaml` may not have been created.
+The install script downloads from GitHub Releases. If this fails:
 
-Run the setup script manually:
+1. Manually download from [qqbot-go releases](https://github.com/holy-tiger/qqbot-go/releases)
+2. Extract `qqbot` and `qqbot-channel` to `~/.local/bin/`
+3. Make executable: `chmod +x ~/.local/bin/qqbot ~/.local/bin/qqbot-channel`
+
+### Manually create config
+
+If you can't run `setup.sh`, create the config file manually:
 
 ```bash
-bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/setup.sh
-```
-
-Or create the config manually:
-
-```bash
-mkdir -p ~/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy
-
-cat > ~/.codebuddy/plugins/data/qqbot-channel-qqbot-channel-codebuddy/config.yaml <<'YAML'
+cat > ~/.local/bin/qqbot-config.yaml <<'YAML'
 qqbot:
   appId: "YOUR_APP_ID"
   clientSecret: "YOUR_APP_SECRET"
@@ -125,19 +128,11 @@ YAML
 
 ### Marketplace update fails (git pull error 128)
 
-This is a network connectivity issue — the plugin marketplace fetches updates from GitHub. If your network blocks GitHub access:
+Network connectivity issue — the plugin marketplace fetches updates from GitHub. If your network blocks GitHub access:
 
 1. Set a proxy: `export https_proxy=http://your-proxy:port`
 2. Or use a GitHub mirror
 3. Then retry: `codebuddy plugin marketplace add https://github.com/holy-tiger/qqbot-channel-codebuddy`
-
-### Binary download fails
-
-The install script downloads from GitHub Releases. If this fails:
-
-1. Manually download from [qqbot-go releases](https://github.com/holy-tiger/qqbot-go/releases)
-2. Extract `qqbot` and `qqbot-channel` to `~/.local/bin/`
-3. Make executable: `chmod +x ~/.local/bin/qqbot ~/.local/bin/qqbot-channel`
 
 ## Related
 
