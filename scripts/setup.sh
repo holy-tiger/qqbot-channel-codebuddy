@@ -17,17 +17,38 @@ echo "  qqbot-channel 插件安装配置"
 echo "========================================"
 echo ""
 
-# ── Step 1: Install binary ──────────────────────────────────────────
-if [ -x "${INSTALL_DIR}/qqbot" ]; then
-  echo "[1/2] qqbot 二进制已安装: ${INSTALL_DIR}/qqbot"
+# ── Step 1: Check dependencies ─────────────────────────────────────
+if ! command -v ffmpeg &>/dev/null || ! command -v ffprobe &>/dev/null; then
+  echo "⚠️  未检测到 ffmpeg/ffprobe（语音消息编码所需运行时依赖）"
+  echo ""
+  echo "  安装方式："
+  echo "    Debian/Ubuntu:  sudo apt install ffmpeg"
+  echo "    macOS:          brew install ffmpeg"
+  echo "    Windows:        choco install ffmpeg"
+  echo ""
+  echo -n "是否继续安装（语音功能将不可用）? (y/N): "
+  read -r CONTINUE
+  if [ "$CONTINUE" != "y" ] && [ "$CONTINUE" != "Y" ]; then
+    echo "退出。请先安装 ffmpeg 后重新运行。"
+    exit 1
+  fi
+  echo ""
 else
-  echo "[1/2] 正在安装 qqbot 二进制..."
+  echo "[依赖] ffmpeg/ffprobe 已安装 ✓"
+  echo ""
+fi
+
+# ── Step 2: Install binary ──────────────────────────────────────────
+if [ -x "${INSTALL_DIR}/qqbot" ]; then
+  echo "[2/3] qqbot 二进制已安装: ${INSTALL_DIR}/qqbot"
+else
+  echo "[2/3] 正在安装 qqbot 二进制..."
   SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
   bash "${SCRIPT_DIR}/install.sh"
 fi
 echo ""
 
-# ── Step 2: Collect credentials ─────────────────────────────────────
+# ── Step 3: Collect credentials ─────────────────────────────────────
 # If config already exists, ask whether to overwrite
 if [ -f "$CONFIG_FILE" ]; then
   echo "检测到已有配置文件: ${CONFIG_FILE}"
@@ -65,7 +86,7 @@ if [ -z "$APP_ID" ] || [ -z "$CLIENT_SECRET" ]; then
   exit 1
 fi
 
-# ── Step 3: Optional settings with defaults ─────────────────────────
+# ── Step 4: Optional settings with defaults ─────────────────────────
 echo ""
 echo "以下为可选配置，直接回车使用默认值："
 
@@ -86,9 +107,9 @@ case "$DM_POLICY" in
   *) DM_POLICY="open" ;;
 esac
 
-# ── Step 4: Write config ────────────────────────────────────────────
+# ── Step 5: Write config ────────────────────────────────────────────
 echo ""
-echo "[2/2] 写入配置文件: ${CONFIG_FILE}"
+echo "[3/3] 写入配置文件: ${CONFIG_FILE}"
 cat > "${CONFIG_FILE}" <<YAML
 qqbot:
   appId: "${APP_ID}"

@@ -10,13 +10,27 @@ Bridges QQ messaging (C2C private chat, group chat, guild channel, guild DM) to 
 - **Reply** - Send text, images, voice, video, and file messages back to QQ
 - **Scheduled reminders** - Set and cancel cron-based reminders via MCP tools
 - **Permission relay** - Forward tool call approval requests to QQ users for remote review
-- **Rich media** - Full support for images, voice (SILK/ASR), video, and file attachments
+- **Rich media** - Full support for images, voice (Edge TTS + SILK encoding), video, and file attachments
 - **Multi-chat** - Supports C2C, group, guild channel, and guild DM conversations
 
 ## Prerequisites
 
 - CodeBuddy Code with plugin support
 - A QQ Bot application (App ID + App Secret) from [QQ Open Platform](https://q.qq.com)
+- **ffmpeg/ffprobe** - Required for audio processing (voice message encoding/format conversion). TTS is built-in (Edge TTS), no separate TTS installation needed.
+
+### Install ffmpeg
+
+```bash
+# Debian/Ubuntu
+sudo apt install ffmpeg
+
+# macOS
+brew install ffmpeg
+
+# Windows (via Chocolatey)
+choco install ffmpeg
+```
 
 ## Supported Platforms
 
