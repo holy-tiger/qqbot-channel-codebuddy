@@ -17,20 +17,60 @@ echo "  qqbot-channel 插件安装配置"
 echo "========================================"
 echo ""
 
-# ── Step 1: Check dependencies ─────────────────────────────────────
+# ── Step 1: Check / install dependencies ────────────────────────────
 if ! command -v ffmpeg &>/dev/null || ! command -v ffprobe &>/dev/null; then
   echo "⚠️  未检测到 ffmpeg/ffprobe（语音消息编码所需运行时依赖）"
-  echo ""
-  echo "  安装方式："
-  echo "    Debian/Ubuntu:  sudo apt install ffmpeg"
-  echo "    macOS:          brew install ffmpeg"
-  echo "    Windows:        choco install ffmpeg"
-  echo ""
-  echo -n "是否继续安装（语音功能将不可用）? (y/N): "
-  read -r CONTINUE
-  if [ "$CONTINUE" != "y" ] && [ "$CONTINUE" != "Y" ]; then
-    echo "退出。请先安装 ffmpeg 后重新运行。"
-    exit 1
+
+  # Try auto-install
+  if command -v apt-get &>/dev/null; then
+    INSTALL_CMD="sudo apt-get update && sudo apt-get install -y ffmpeg"
+  elif command -v apt &>/dev/null; then
+    INSTALL_CMD="sudo apt update && sudo apt install -y ffmpeg"
+  elif command -v dnf &>/dev/null; then
+    INSTALL_CMD="sudo dnf install -y ffmpeg"
+  elif command -v yum &>/dev/null; then
+    INSTALL_CMD="sudo yum install -y ffmpeg"
+  elif command -v pacman &>/dev/null; then
+    INSTALL_CMD="sudo pacman -S --noconfirm ffmpeg"
+  elif command -v brew &>/dev/null; then
+    INSTALL_CMD="brew install ffmpeg"
+  elif command -v choco &>/dev/null; then
+    INSTALL_CMD="choco install -y ffmpeg"
+  else
+    INSTALL_CMD=""
+  fi
+
+  if [ -n "$INSTALL_CMD" ]; then
+    echo ""
+    echo -n "是否自动安装 ffmpeg? (Y/n): "
+    read -r AUTO_INSTALL
+    if [ "$AUTO_INSTALL" != "n" ] && [ "$AUTO_INSTALL" != "N" ]; then
+      echo "正在执行: ${INSTALL_CMD}"
+      if eval "$INSTALL_CMD"; then
+        echo ""
+        echo "[依赖] ffmpeg 安装成功 ✓"
+      else
+        echo ""
+        echo "⚠️  自动安装失败，请手动安装 ffmpeg 后重新运行。"
+        exit 1
+      fi
+    else
+      echo ""
+      echo "已跳过。语音功能将不可用。"
+    fi
+  else
+    echo ""
+    echo "  未识别包管理器，请手动安装 ffmpeg："
+    echo "    Debian/Ubuntu:  sudo apt install ffmpeg"
+    echo "    macOS:          brew install ffmpeg"
+    echo "    Windows:        choco install ffmpeg"
+    echo ""
+    echo -n "是否继续安装（语音功能将不可用）? (y/N): "
+    read -r CONTINUE
+    if [ "$CONTINUE" != "y" ] && [ "$CONTINUE" != "Y" ]; then
+      echo "退出。请先安装 ffmpeg 后重新运行。"
+      exit 1
+    fi
   fi
   echo ""
 else
