@@ -8,7 +8,7 @@
         },
         {
           "type": "command",
-          "command": "mkdir -p \"${CODEBUDDY_PLUGIN_DATA}\" && cat > \"${CODEBUDDY_PLUGIN_DATA}/config.yaml\" <<YAML\nqqbot:\n  appId: \"${CODEBUDDY_PLUGIN_OPTION_appId}\"\n  clientSecret: \"${CODEBUDDY_PLUGIN_OPTION_clientSecret}\"\n  enabled: true\n  name: \"My QQ Bot\"\n  systemPrompt: \"You are a helpful assistant.\"\n  dmPolicy: \"open\"\nYAML"
+          "command": "if [ -n \"${CODEBUDDY_PLUGIN_OPTION_appId:-}\" ] && [ -n \"${CODEBUDDY_PLUGIN_OPTION_clientSecret:-}\" ]; then mkdir -p \"${CODEBUDDY_PLUGIN_DATA}\" && cat > \"${CODEBUDDY_PLUGIN_DATA}/config.yaml\" <<YAML\nqqbot:\n  appId: \"${CODEBUDDY_PLUGIN_OPTION_appId}\"\n  clientSecret: \"${CODEBUDDY_PLUGIN_OPTION_clientSecret}\"\n  enabled: true\n  name: \"My QQ Bot\"\n  systemPrompt: \"You are a helpful assistant.\"\n  dmPolicy: \"open\"\nYAML\nelse echo 'Warning: QQ Bot credentials not configured. Run: codebuddy plugin enable qqbot-channel' >&2; fi"
         }
       ]
     }
