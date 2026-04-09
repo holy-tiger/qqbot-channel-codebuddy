@@ -78,6 +78,58 @@ else
   echo ""
 fi
 
+# ── Step 1b: Check / install edge-tts ────────────────────────────────
+if ! command -v edge-tts &>/dev/null; then
+  echo "⚠️  未检测到 edge-tts（语音消息合成所需运行时依赖）"
+
+  # Determine install command based on available Python package manager
+  if command -v pip &>/dev/null; then
+    EDGE_TTS_INSTALL_CMD="pip install edge-tts"
+  elif command -v pip3 &>/dev/null; then
+    EDGE_TTS_INSTALL_CMD="pip3 install edge-tts"
+  elif command -v python3 -m pip &>/dev/null; then
+    EDGE_TTS_INSTALL_CMD="python3 -m pip install edge-tts"
+  else
+    EDGE_TTS_INSTALL_CMD=""
+  fi
+
+  if [ -n "$EDGE_TTS_INSTALL_CMD" ]; then
+    echo ""
+    echo -n "是否自动安装 edge-tts? (Y/n): "
+    read -r AUTO_INSTALL_EDGE_TTS
+    if [ "$AUTO_INSTALL_EDGE_TTS" != "n" ] && [ "$AUTO_INSTALL_EDGE_TTS" != "N" ]; then
+      echo "正在执行: ${EDGE_TTS_INSTALL_CMD}"
+      if eval "$EDGE_TTS_INSTALL_CMD"; then
+        echo ""
+        echo "[依赖] edge-tts 安装成功 ✓"
+      else
+        echo ""
+        echo "⚠️  自动安装失败，请手动安装 edge-tts 后重新运行。"
+        echo "  pip install edge-tts"
+        exit 1
+      fi
+    else
+      echo ""
+      echo "已跳过。语音合成功能将不可用。"
+    fi
+  else
+    echo ""
+    echo "  未检测到 pip，请先安装 Python 及 pip，然后执行："
+    echo "    pip install edge-tts"
+    echo ""
+    echo -n "是否继续安装（语音合成功能将不可用）? (y/N): "
+    read -r CONTINUE_EDGE_TTS
+    if [ "$CONTINUE_EDGE_TTS" != "y" ] && [ "$CONTINUE_EDGE_TTS" != "Y" ]; then
+      echo "退出。请先安装 edge-tts 后重新运行。"
+      exit 1
+    fi
+  fi
+  echo ""
+else
+  echo "[依赖] edge-tts 已安装 ✓"
+  echo ""
+fi
+
 # ── Step 2: Install binary ──────────────────────────────────────────
 if [ -x "${INSTALL_DIR}/qqbot" ]; then
   echo "[2/3] qqbot 二进制已安装: ${INSTALL_DIR}/qqbot"
