@@ -17,7 +17,8 @@ Bridges QQ messaging (C2C private chat, group chat, guild channel, guild DM) to 
 
 - CodeBuddy Code with plugin support
 - A QQ Bot application (App ID + App Secret) from [QQ Open Platform](https://q.qq.com)
-- **ffmpeg/ffprobe** - Required for audio processing (voice message encoding/format conversion). TTS is built-in (Edge TTS), no separate TTS installation needed.
+- **ffmpeg/ffprobe** - Required for audio processing (voice message encoding/format conversion)
+- **edge-tts** - Required for voice message synthesis (text-to-speech). Installed automatically by `setup.sh` or via `pip install edge-tts`
 
 ### Install ffmpeg
 
@@ -30,6 +31,14 @@ brew install ffmpeg
 
 # Windows (via Chocolatey)
 choco install ffmpeg
+```
+
+### Install edge-tts
+
+```bash
+pip install edge-tts
+# 或
+pip3 install edge-tts
 ```
 
 ## Supported Platforms
@@ -106,7 +115,7 @@ bash ~/.codebuddy/plugins/cache/qqbot-channel-qqbot-channel-codebuddy/scripts/se
 | `media_type` | No | 媒体类型，可选: `image` (图片), `file` (文件), `voice` (语音), `video` (视频)。不设置则发送纯文本 |
 | `media_url` | No | 媒体文件的 URL。`media_type` 为 `image`/`file`/`video` 时必填 |
 
-**语音消息说明**: `media_type` 设为 `voice` 时，插件内部使用 Edge TTS 自动将 `text` 转为语音发送。**不要自行安装 edge-tts 或任何 TTS 工具**，直接调用 `reply` 工具并设置 `media_type="voice"` 即可，无需提供 `media_url`。
+**语音消息说明**: `media_type` 设为 `voice` 时，插件使用 Edge TTS 将 `text` 转为语音发送。请确保已安装 `edge-tts`（运行 `setup.sh` 会自动检测并安装）。无需提供 `media_url`。
 
 **使用示例**:
 
